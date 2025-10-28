@@ -1,0 +1,22 @@
+{
+  "welcome": "Welcome to web3!",
+  "homeTitle": "HOME",
+  "shopTitle": "SHOP",
+  "userCenterTitle": "USER",
+  "menuTitle": "Menu",
+  "evmObjMissing": "Ethereum object not found",
+  "connectWalletError": "Please install metamask or other wallet first",
+  "uniSatTitle": "UniSat",
+  "metamaskTitle": "Metamask",
+  "walletConnectTitle": "WalletConnect",
+  "chargeTitle": "Charge",
+  "withdrawalTitle": "Withdrawal",
+  "submitButton": "Submit",
+  "bitcoinMainNetTitle": "Bitcoin Mainnet",
+  "ethereumTitle": "Ethereum",
+  "chargeTips": "You will have {currency} + income + integral",
+  "fromAccountBalance": "Account balance ",
+  "fromTitle": "From",
+  "toTitle": "To",
+  "userCenterDesc": "This is User Center."
+}

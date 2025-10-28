@@ -1,0 +1,63 @@
+@import "../../../application/theme"
+
+$formRowHeight: 56px
+
+.charge
+  .form
+    margin-top: 16px
+
+    .form-item
+      margin-top: 16px
+
+    .form-label
+      width: $formRowHeight
+      height: $formRowHeight
+      line-height: $formRowHeight
+
+      &.start
+        background: url("../../assets/bg-label.png") no-repeat
+        background-size: 100% auto
+
+      &.end
+        background: url("../../assets/bg-label-2.png") no-repeat
+        background-size: 100% auto
+
+    .form-group
+      width: 380px
+      margin-left: 21px
+
+      .box
+        width: 100%
+        padding-left: 16px
+        padding-right: 16px
+        border: 1px solid $border
+        background: $colorLight
+
+        .box,
+        .input-box
+          border: none
+          background: none
+          margin: 0
+          padding: 0
+
+        .input-box
+          width: auto
+          height: $formRowHeight
+          flex: 2
+
+          .input-box-input
+            width: 100%
+            font-size: $fontSizeBigger2
+
+      & > .box
+        height: $formRowHeight
+        line-height: $formRowHeight
+        padding-top: 0
+        padding-bottom: 0
+
+    .tips
+      color: rgba(255, 255, 255, 0.8)
+
+  .control
+    width: 100%
+    margin: 36px 0

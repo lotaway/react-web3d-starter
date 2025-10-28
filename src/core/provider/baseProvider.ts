@@ -1,0 +1,3 @@
+interface BaseArgs {
+    signal?: AbortSignal
+}

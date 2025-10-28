@@ -1,0 +1,64 @@
+@import "../../../application/theme"
+
+$cardBorder: 1px solid rgba(255, 255, 255, 0.50)
+
+.card
+  position: relative
+
+  .wrapper
+    width: 600px
+    margin: 0 auto
+    border: $cardBorder
+    background: $colorDeepGray
+    padding: 20px
+    z-index: 2
+    
+  &.shadow
+    margin-top: 18px
+    background: $colorBlack
+    border: $cardBorder
+
+    .wrapper
+      margin: 18px 18px -18px -18px
+      border: $cardBorder
+      background: $colorBlack
+      z-index: -1
+
+  .card-title
+    position: relative
+    border-bottom: 1px solid $border
+    padding-bottom: 20px
+
+  .card-title
+    &:after
+      content: ""
+      display: block
+      position: absolute
+      left: 0
+      bottom: -1px
+      width: 13.8%
+      height: 2px
+      background: $highLight
+
+  .card-tab-title
+    border-bottom: 1px solid $border
+
+    .link
+      display: inline-block
+      position: relative
+      color: #fff
+      padding: 0 60px 20px
+      font-size: $fontSizeBigger2
+
+  .card-tab-title .in-active
+    color: $highLight
+
+    &:after
+      content: ""
+      display: block
+      position: absolute
+      left: 0
+      bottom: -1px
+      width: 100%
+      height: 2px
+      background: $highLight
