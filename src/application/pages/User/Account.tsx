@@ -1,22 +1,18 @@
-import {useLocation, useNavigate} from "react-router-dom"
-import Card from "../../../commons/layouts/Card/Card"
-import {useTranslation} from "react-i18next"
-import {useEffect} from "react"
+import { useLocation, useNavigate } from "react-router-dom"
+import { useTranslation } from "react-i18next"
+import { useEffect } from "react"
 import "./Account.sass"
+import TabBar from "../../../commons/components/TabBar/TabBar"
 
 export default function Account() {
     const location = useLocation()
     const navigate = useNavigate()
-    const {t} = useTranslation()
+    const { t } = useTranslation()
     const tabList = [
         {
-            title: t("chargeTitle"),
+            name: t("chargeTitle"),
             path: "charge"
         },
-        {
-            title: t("withdrawalTitle"),
-            path: "withdrawal"
-        }
     ]
     useEffect(() => {
         if (location.pathname.endsWith("account"))
@@ -28,7 +24,7 @@ export default function Account() {
                 <h3 className="intro-title">
                 </h3>
             </div>
-            <Card.Tab tabList={tabList}/>
+            <TabBar tabs={tabList} />
         </div>
     )
 }

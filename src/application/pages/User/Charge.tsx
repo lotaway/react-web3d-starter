@@ -1,5 +1,5 @@
 import Button from "../../../commons/components/Button/Button"
-import {useTranslation} from "react-i18next"
+import { useTranslation } from "react-i18next"
 import Dropdown from "../../../commons/container/Dropdown/Dropdown"
 import "./Charge.sass"
 import Box from "../../../commons/layouts/Box/Box"
@@ -7,7 +7,7 @@ import InputBox from "../../../commons/components/InputBox/InputBox"
 import Tag from "../../../commons/components/Tag/Tag"
 
 export default function Charge() {
-    const {t} = useTranslation()
+    const { t } = useTranslation()
     const fromList = [
         {
             text: t("bitcoinMainNetTitle")
@@ -19,18 +19,18 @@ export default function Charge() {
     const coinUnit = [{
         text: "ETH",
     },
-        {
-            text: 'XUSD',
-        },
-        {
-            text: "USDC",
-        },
-        {
-            text: "USDT",
-        },
-        {
-            text: "WBTC",
-        },
+    {
+        text: 'XUSD',
+    },
+    {
+        text: "USDC",
+    },
+    {
+        text: "USDT",
+    },
+    {
+        text: "WBTC",
+    },
     ]
 
     function selectFrom(index: number, value?: string | number) {
@@ -55,12 +55,12 @@ export default function Charge() {
                         <div className="form-group flex flex-col justify-start items-stretch">
                             <Box className="flex justify-between items-center">
                                 <Box className="">
-                                    <InputBox placeholder="0.01"/>
+                                    <InputBox placeholder="0.01" />
                                 </Box>
-                                <Tag text="MAX"/>
+                                <Tag text="MAX" />
                                 <Dropdown className=""
-                                          onMenuItemClick={selectCoinUnit}
-                                          menuList={coinUnit}/>
+                                    onMenuItemClick={selectCoinUnit}
+                                    menuList={coinUnit} />
                             </Box>
                             <p className="tips">{t("fromAccountBalance")} 25.4597 BTC</p>
                         </div>

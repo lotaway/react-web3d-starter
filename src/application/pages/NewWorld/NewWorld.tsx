@@ -1,4 +1,4 @@
-import {memo, createRef, useEffect} from "react"
+import { memo, createRef, useEffect } from "react"
 import {
     BindGroupProxy,
     GPUBindGroupBuilder,
@@ -17,7 +17,7 @@ import shadowDepthWGSL from "../../shader/shadow-depth.wgsl?raw"
 import pinkFragmentWGSL from "../../shader/pink.frag.wgsl?raw"
 import colorFragmentWGSL from "../../shader/color.frag.wgsl?raw"
 import style from "./NewWorld.module.sass"
-import {mat4, vec3} from "gl-matrix"
+import { mat4, vec3 } from "gl-matrix"
 
 interface RenderOptions {
     textureView?: GPUTextureView,
@@ -50,7 +50,7 @@ class Web3d {
     }
 
     async init() {
-        const {vert, depthTexture, shadowDepthTexture} = await this.initPipeline()
+        const { vert, depthTexture, shadowDepthTexture } = await this.initPipeline()
         this.initUniform()
         await this.initTexture()
         this.render({
@@ -67,12 +67,12 @@ class Web3d {
 
     static getTriangleVertex() {
         return [
-            {x: 0.0, y: 0.0, z: 0.0},
-            {x: 0.5, y: 0.0, z: 0.0},
-            {x: 0.0, y: 0.5, z: 0.0},
-            {x: 0.0, y: 0.5, z: 0.0},
-            {x: 0.5, y: 0.0, z: 0.0},
-            {x: 0.5, y: 0.5, z: 0.0}
+            { x: 0.0, y: 0.0, z: 0.0 },
+            { x: 0.5, y: 0.0, z: 0.0 },
+            { x: 0.0, y: 0.5, z: 0.0 },
+            { x: 0.0, y: 0.5, z: 0.0 },
+            { x: 0.5, y: 0.0, z: 0.0 },
+            { x: 0.5, y: 0.5, z: 0.0 }
         ]
     }
 
@@ -102,70 +102,70 @@ class Web3d {
     static getCubeVertex() {
         return [
             //  正面
-            {x: -1.0, y: 1.0, z: -1.0},
-            {x: -1.0, y: -1.0, z: -1.0},
-            {x: 1.0, y: 1.0, z: -1.0},
-            {x: 1.0, y: -1.0, z: -1.0},
+            { x: -1.0, y: 1.0, z: -1.0 },
+            { x: -1.0, y: -1.0, z: -1.0 },
+            { x: 1.0, y: 1.0, z: -1.0 },
+            { x: 1.0, y: -1.0, z: -1.0 },
             //  背面
-            {x: -1.0, y: 1.0, z: 1.0},
-            {x: -1.0, y: -1.0, z: 1.0},
-            {x: 1.0, y: 1.0, z: 1.0},
-            {x: 1.0, y: -1.0, z: 1.0},
+            { x: -1.0, y: 1.0, z: 1.0 },
+            { x: -1.0, y: -1.0, z: 1.0 },
+            { x: 1.0, y: 1.0, z: 1.0 },
+            { x: 1.0, y: -1.0, z: 1.0 },
             //  左面
-            {x: -1.0, y: -1.0, z: -1.0},
-            {x: -1.0, y: 1.0, z: -1.0},
-            {x: -1.0, y: -1.0, z: 1.0},
-            {x: -1.0, y: 1.0, z: 1.0},
+            { x: -1.0, y: -1.0, z: -1.0 },
+            { x: -1.0, y: 1.0, z: -1.0 },
+            { x: -1.0, y: -1.0, z: 1.0 },
+            { x: -1.0, y: 1.0, z: 1.0 },
             //  右面
-            {x: 1.0, y: -1.0, z: -1.0},
-            {x: 1.0, y: 1.0, z: -1.0},
-            {x: 1.0, y: -1.0, z: 1.0},
-            {x: 1.0, y: 1.0, z: 1.0},
+            { x: 1.0, y: -1.0, z: -1.0 },
+            { x: 1.0, y: 1.0, z: -1.0 },
+            { x: 1.0, y: -1.0, z: 1.0 },
+            { x: 1.0, y: 1.0, z: 1.0 },
             //  上面
-            {x: -1.0, y: 1.0, z: 1.0},
-            {x: 1.0, y: 1.0, z: 1.0},
-            {x: -1.0, y: 1.0, z: -1.0},
-            {x: 1.0, y: 1.0, z: -1.0},
+            { x: -1.0, y: 1.0, z: 1.0 },
+            { x: 1.0, y: 1.0, z: 1.0 },
+            { x: -1.0, y: 1.0, z: -1.0 },
+            { x: 1.0, y: 1.0, z: -1.0 },
             //  下面
-            {x: -1.0, y: -1.0, z: 1.0},
-            {x: 1.0, y: -1.0, z: 1.0},
-            {x: -1.0, y: -1.0, z: -1.0},
-            {x: 1.0, y: -1.0, z: -1.0},
+            { x: -1.0, y: -1.0, z: 1.0 },
+            { x: 1.0, y: -1.0, z: 1.0 },
+            { x: -1.0, y: -1.0, z: -1.0 },
+            { x: 1.0, y: -1.0, z: -1.0 },
         ]
     }
 
     static getNormal() {
         return [
 
-            {x: 0, y: 0, z: -1,},
-            {x: 0, y: 0, z: -1,},
-            {x: 0, y: 0, z: -1,},
-            {x: 0, y: 0, z: -1,},
+            { x: 0, y: 0, z: -1, },
+            { x: 0, y: 0, z: -1, },
+            { x: 0, y: 0, z: -1, },
+            { x: 0, y: 0, z: -1, },
 
-            {x: 0, y: 0, z: 1,},
-            {x: 0, y: 0, z: 1,},
-            {x: 0, y: 0, z: 1,},
-            {x: 0, y: 0, z: 1,},
+            { x: 0, y: 0, z: 1, },
+            { x: 0, y: 0, z: 1, },
+            { x: 0, y: 0, z: 1, },
+            { x: 0, y: 0, z: 1, },
 
-            {x: -1, y: 0, z: 0,},
-            {x: -1, y: 0, z: 0,},
-            {x: -1, y: 0, z: 0,},
-            {x: -1, y: 0, z: 0,},
+            { x: -1, y: 0, z: 0, },
+            { x: -1, y: 0, z: 0, },
+            { x: -1, y: 0, z: 0, },
+            { x: -1, y: 0, z: 0, },
 
-            {x: 1, y: 0, z: 0,},
-            {x: 1, y: 0, z: 0,},
-            {x: 1, y: 0, z: 0,},
-            {x: 1, y: 0, z: 0,},
+            { x: 1, y: 0, z: 0, },
+            { x: 1, y: 0, z: 0, },
+            { x: 1, y: 0, z: 0, },
+            { x: 1, y: 0, z: 0, },
 
-            {x: 0, y: 1, z: 0,},
-            {x: 0, y: 1, z: 0,},
-            {x: 0, y: 1, z: 0,},
-            {x: 0, y: 1, z: 0,},
+            { x: 0, y: 1, z: 0, },
+            { x: 0, y: 1, z: 0, },
+            { x: 0, y: 1, z: 0, },
+            { x: 0, y: 1, z: 0, },
 
-            {x: 0, y: -1, z: 0,},
-            {x: 0, y: -1, z: 0,},
-            {x: 0, y: -1, z: 0,},
-            {x: 0, y: -1, z: 0,},
+            { x: 0, y: -1, z: 0, },
+            { x: 0, y: -1, z: 0, },
+            { x: 0, y: -1, z: 0, },
+            { x: 0, y: -1, z: 0, },
         ]
     }
 
@@ -258,7 +258,7 @@ class Web3d {
         ]
     }
 
-//  创建渲染管线
+    //  创建渲染管线
     async initPipeline() {
         const vertexModule = GPUShaderModuleBuilder
             .fromWGSL(vertexWGSL)
@@ -418,7 +418,7 @@ class Web3d {
         })
     }
 
-//  Uniform负责实现变形矩阵，bindGroup可以实现对顶点着色器和片元着色器传递值
+    //  Uniform负责实现变形矩阵，bindGroup可以实现对顶点着色器和片元着色器传递值
     initUniform() {
         const colorsArray = Float32Array.from([Math.random(), Math.random(), Math.random()])
         const gpuBufferBuilder = GPUBufferBuilder.createForUniform(colorsArray.byteLength)
@@ -468,7 +468,7 @@ class Web3d {
         mat4.perspective(cameraProjectionMatrix, Math.PI / 2, this.webGpu.canvas.width / this.webGpu.canvas.height, 1, 100)
         // const mvpMatrix = mat4.create() as Float32Array
         // mat4.multiply(mvpMatrix, cameraProjectionMatrix, modelViewMatrix)
-        return {modelViewMatrix, cameraProjectionMatrix}
+        return { modelViewMatrix, cameraProjectionMatrix }
     }
 
     drawTestMatrix(renderPass: GPURenderPassEncoder, pipeline: GPURenderPipeline, drawHandler: Function, groupIndex: number, angle: number, directionalArray: Float32Array | mat4) {
@@ -724,7 +724,7 @@ function NewWorld() {
         return dispose
     }, [])
     return (
-        <canvas ref={canvasRef} width="800" height="800" className={style.newWorld}/>
+        <canvas ref={canvasRef} width="800" height="600" className={style.newWorld} />
     )
 }
 
