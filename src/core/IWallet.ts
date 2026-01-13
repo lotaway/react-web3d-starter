@@ -10,6 +10,8 @@ export enum WalletName {
     METAMASK,
     WALLETCONNECT,
     OKX,
+    PHANTOM,
+    SOLFLARE,
 }
 
 export enum CurrencyName {

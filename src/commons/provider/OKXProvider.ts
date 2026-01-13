@@ -1,6 +1,6 @@
-// import {verifyMessage} from "@unisat/wallet-utils/lib"
-import IWebProvider from "../core/IWebProvider"
-import {Eip1193Provider} from "ethers"
+import { IWalletProvider } from "../../core/wallet/IWalletProvider"
+import { WalletName } from "../../core/IWallet"
+import { Eip1193Provider } from "ethers"
 
 export enum OKXNetwork {
 
@@ -17,7 +17,8 @@ class OKXError extends Error {
 }
 
 // 官方文档：https://www.okx.com/cn/web3/build/docs/sdks/web-detect-okx-wallet
-export class OKXProvider implements IWebProvider {
+export class OKXProvider implements IWalletProvider {
+    readonly name = WalletName.OKX;
 
     readonly wallet: OKXWalletBitcoin.WindowOKXWallet
     accounts: Array<string>
@@ -46,6 +47,10 @@ export class OKXProvider implements IWebProvider {
         return typeof OKXProvider.getOKXWallet() !== 'undefined'
     }
 
+    isInstalled(): boolean {
+        return OKXProvider.isInstalled()
+    }
+
     static getInstance() {
         if (!OKXProvider.okxProvider) {
             OKXProvider.okxProvider = new OKXProvider()
@@ -53,8 +58,8 @@ export class OKXProvider implements IWebProvider {
         return OKXProvider.okxProvider
     }
 
-    async connect(network?: OKXNetwork) {
-        this.accounts = await this.wallet.request({method: 'eth_requestAccounts'})
+    async connect(network?: OKXNetwork): Promise<string[]> {
+        this.accounts = await this.wallet.request({ method: 'eth_requestAccounts' })
         return this.accounts
     }
 
@@ -67,7 +72,7 @@ export class OKXProvider implements IWebProvider {
     }
 
     async getWalletAddress() {
-        this.accounts = await this.wallet.request({method: 'eth_accounts'})
+        this.accounts = await this.wallet.request({ method: 'eth_accounts' })
         return this.accounts
     }
 
@@ -77,12 +82,16 @@ export class OKXProvider implements IWebProvider {
         return this.bitCoinAccounts
     }
 
-    async getWalletDefaultAddress() {
+    async getAddress() {
         if (this.accounts.length) {
             return this.accounts[0]
         }
         await this.getWalletAddress()
-        return this.accounts[0]
+        return this.accounts[0] || null
+    }
+
+    async getWalletDefaultAddress() {
+        return await this.getAddress()
     }
 
     async getWalletDefaultAddressFromBitcoin() {
@@ -112,7 +121,7 @@ export class OKXProvider implements IWebProvider {
         // try {
         await this.wallet.request({
             method: 'wallet_switchEthereumChain',
-            params: [{chainId}],
+            params: [{ chainId }],
         })
         /* } catch (switchError: OKXError | unknown) {
              // This error code indicates that the chain has not been added to OKX.
@@ -136,7 +145,7 @@ export class OKXProvider implements IWebProvider {
         return await this.wallet.bitcoin.getPublicKey()
     }
 
-    async signMessage(message: string, walletAddress?: string): Promise<{ result: string }> {
+    async signMessage(message: string, walletAddress?: string): Promise<string> {
         return await this.wallet
             .request({
                 method: 'eth_sign',
@@ -149,11 +158,15 @@ export class OKXProvider implements IWebProvider {
     }
 
     async getWalletSignature(message: string) {
-        return (await this.signMessage(message)).result
+        return await this.signMessage(message)
     }
 
     async getWalletSignatureFromBitcoin(message: string) {
         return await this.signMessageInBitcoin(message)
+    }
+
+    onAccountsChanged(callback: (accounts: string[]) => void): void {
+        this.addAccountsChangedListener(callback)
     }
 
     addAccountsChangedListener(callback: typeof this.accountsChangedListener) {
@@ -180,27 +193,29 @@ export class OKXProvider implements IWebProvider {
         return result
     }
 
-    async getBalance() {
-        return await this.wallet.request({
+    async getBalance(): Promise<string> {
+        const result = await this.wallet.request({
             method: "getBalance",
         })
+        return String(result)
     }
 
     async getBalanceFromBitcoin() {
         return await this.wallet.bitcoin.getBalance()
     }
 
-    async transferTo(to: string, satoshis: NSBitcoin.Satoshis, from?: string) {
+    async transfer(to: string, amount: string): Promise<string> {
+        return await this.transferTo(to, amount)
+    }
+
+    async transferTo(to: string, satoshis: string, from?: string) {
         return await this.wallet.request({
             method: 'eth_sendTransaction',
             params: [
                 {
                     from: from ?? this.accounts?.[0] ?? await this.getWalletDefaultAddress(),
                     to: to,
-                    // value: '0x29a2241af62c0000',
                     value: satoshis,
-                    // gasPrice: '0x09184e72a000',
-                    // gas: '0x2710',
                 },
             ]
         })

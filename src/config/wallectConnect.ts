@@ -34,3 +34,12 @@ export const METADATA = {
     url: 'https://www.lins20.com/',
     icons: ['https://www.lins20.com/favicon.ico']
 }
+
+export const getMainNet = () => {
+    const chainId = Number(import.meta.env.VITE_CHAIN_ID);
+    const chain = CHAINS.find(c => c.chainId === chainId);
+    if (!chain) {
+        throw new Error(`Chain ID ${chainId} not found in CHAINS configuration. Please check your .env file.`);
+    }
+    return chain;
+}

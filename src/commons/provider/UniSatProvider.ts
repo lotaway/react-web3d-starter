@@ -1,10 +1,10 @@
-// import {verifyMessage} from "@unisat/wallet-utils/lib"
-import IWebProvider from "../core/IWebProvider"
-import {BitcoinNetwork} from "../core/IWallet"
+import { IWalletProvider } from "../../core/wallet/IWalletProvider"
+import { WalletName, BitcoinNetwork } from "../../core/IWallet"
 
 // 官方文档：https://docs.unisat.io/dev/unisat-developer-service/unisat-wallet
 // 第三方示例：https://blog.csdn.net/qq_45032714/article/details/131610569
-export class UniSatProvider implements IWebProvider {
+export class UniSatProvider implements IWalletProvider {
+    readonly name = WalletName.UNISAT;
 
     accounts: Array<string>
     static uniSatProvider: UniSatProvider
@@ -22,6 +22,10 @@ export class UniSatProvider implements IWebProvider {
 
     static isInstalled() {
         return typeof UniSatProvider.getUniSat() !== 'undefined'
+    }
+
+    isInstalled(): boolean {
+        return UniSatProvider.isInstalled()
     }
 
     static getInstance() {
@@ -67,12 +71,16 @@ export class UniSatProvider implements IWebProvider {
         return this.accounts
     }
 
-    async getWalletDefaultAddress() {
+    async getAddress(): Promise<string | null> {
         if (this.accounts.length) {
             return this.accounts[0]
         }
         await this.getWalletAddress()
-        return this.accounts[0]
+        return this.accounts[0] || null
+    }
+
+    async getWalletDefaultAddress() {
+        return await this.getAddress()
     }
 
     async getNetwork() {
@@ -131,6 +139,10 @@ export class UniSatProvider implements IWebProvider {
         // > AkcwRAIgeHUcjr0jODaR7GMM8cenWnIj0MYdGmmrpGyMoryNSkgCICzVXWrLIKKp5cFtaCTErY7FGNXTFe6kuEofl4G+Vi5wASECaIeVi8xMtvjATqSSYPDRDjEsQbr0hSUpU7FHJNtVKqw=
     }*/
 
+    onAccountsChanged(callback: (accounts: string[]) => void): void {
+        this.addAccountsChangedListener(callback)
+    }
+
     addAccountsChangedListener(callback: typeof this.accountsChangedListener) {
         this.accountsChangedListener = callback
         return UniSatProvider.getUniSat()!.on('accountsChanged', this.accountsChangedListener)
@@ -143,11 +155,16 @@ export class UniSatProvider implements IWebProvider {
         return result
     }
 
-    async getBalance() {
-        return await UniSatProvider.getUniSat()!.getBalance()
+    async getBalance(): Promise<string> {
+        const balance = await UniSatProvider.getUniSat()!.getBalance()
+        return String(balance.total)
     }
 
-    async transferTo(to: string, satoshis: NSBitcoin.Satoshis) {
+    async transfer(to: string, amount: string): Promise<string> {
+        return await this.transferTo(to, Number(amount))
+    }
+
+    async transferTo(to: string, satoshis: number) {
         if (!UniSatProvider.checkSatoshis(satoshis)) {
             throw new Error(`Amount must be at least ${UniSatProvider.minAmount} BTC, but got ${satoshis} satoshis`)
         }
