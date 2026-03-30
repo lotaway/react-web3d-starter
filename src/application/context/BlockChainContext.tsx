@@ -4,7 +4,7 @@ import { WalletName } from "../../core/IWallet";
 import UserStoreModule from "../../repository/store/modules/user";
 import { WalletFactory } from "../../core/wallet/WalletFactory";
 import { toast } from "react-hot-toast";
-import Logger from "../../commons/utils/Logger";
+import Logger from "../../system/Logger";
 
 export interface IBlockchainContext {
     currentWallet: WalletName;
