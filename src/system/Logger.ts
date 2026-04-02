@@ -7,11 +7,31 @@ export default class Logger {
 
     static instance: Logger | undefined
 
-    constructor(protected isOn: boolean = initConfig.DEBUG) {
+    constructor(public isOn: boolean = initConfig.DEBUG) {
     }
 
     output(message: any, force?: boolean) {
         return (force ?? this.isOn) && console.log(message)
+    }
+
+    static L(...args: any[]) {
+        if (Logger.getInstance().isOn) console.log(...args)
+    }
+
+    static D(...args: any[]) {
+        if (Logger.getInstance().isOn) console.debug(...args)
+    }
+
+    static I(...args: any[]) {
+        if (Logger.getInstance().isOn) console.info(...args)
+    }
+
+    static W(...args: any[]) {
+        if (Logger.getInstance().isOn) console.warn(...args)
+    }
+
+    static E(...args: any[]) {
+        if (Logger.getInstance().isOn) console.error(...args)
     }
 
     private static ParamChecker(target: any, propName: string, descriptor: PropertyDescriptor) {

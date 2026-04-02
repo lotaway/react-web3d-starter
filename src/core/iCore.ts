@@ -18,6 +18,11 @@ interface ILogger {
 interface ILoggerWithStatic<T extends ILogger = ILogger> {
     new(...args: any[]): T
     instance: ILogger | undefined
+    L(...args: any[]): void
+    D(...args: any[]): void
+    I(...args: any[]): void
+    W(...args: any[]): void
+    E(...args: any[]): void
 }
 
 interface ISystem {
